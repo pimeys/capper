@@ -1,0 +1,55 @@
+#!/bin/bash
+export HOME=<%= deploy_to %>
+source <%= deploy_to %>/.rvm/scripts/rvm
+export RAILS_ENV=<%= rails_env %>
+
+PIDFILE=<%= shared_path %>/pids/unicorn.pid
+CONFIG=<%= shared_path %>/config/unicorn.rb
+CMD="bundle exec unicorn -c $CONFIG -E $RAILS_ENV -D config.ru"
+
+cd <%= current_path %>
+
+sig () {
+  test -s "$PIDFILE" && kill -$1 $(<$PIDFILE)
+}
+
+case $1 in
+start)
+  sig 0 && echo >&2 "Already running" && exit 0
+  $CMD
+  ;;
+stop)
+  sig QUIT && exit 0
+  echo >&2 "Not running"
+  ;;
+kill)
+  sig TERM && exit 0
+  echo >&2 "Not running"
+  ;;
+reload)
+  sig HUP && echo reloaded OK && exit 0
+  echo >&2 "Couldn't reload, starting '$CMD' instead"
+  $CMD
+  ;;
+upgrade)
+  sig USR2 && exit 0
+  echo >&2 "Couldn't upgrade, starting '$CMD' instead"
+  $CMD
+  ;;
+addworker)
+  sig TTIN && echo added one worker to the pool OK && exit 0
+  echo >&2 "Couldn't add worker" && exit 1
+  ;;
+delworker)
+  sig TTOU && echo removed one worker from the pool OK && exit 0
+  echo >&2 "Couldn't remove worker" && exit 1
+  ;;
+logrotate)
+  sig USR1 && echo rotated logs OK && exit 0
+  echo >&2 "Couldn't rotate logs" && exit 1
+  ;;
+*)
+  echo >&2 "Usage: $0 <start|stop|kill|reload|upgrade|addworker|delworker|logrotate>"
+  exit 1
+  ;;
+esac
