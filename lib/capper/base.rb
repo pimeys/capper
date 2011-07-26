@@ -4,6 +4,9 @@ unless Capistrano::Configuration.respond_to?(:instance)
   abort "capper requires Capistrano 2"
 end
 
+# add some nice colors
+require "capistrano_colors"
+
 # mixin various helpers
 require 'capper/utils/load'
 

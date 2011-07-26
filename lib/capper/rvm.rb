@@ -23,8 +23,8 @@ Capper.load do
 
     # prevents interactive rvm dialog
     task :trust_rvmrc, :except => {:no_release => true} do
-      run "rvm rvmrc trust #{release_path}"
-      run "rvm rvmrc trust #{current_path}"
+      run "rvm rvmrc trust #{release_path} >/dev/null"
+      run "rvm rvmrc trust #{current_path} >/dev/null"
     end
   end
 

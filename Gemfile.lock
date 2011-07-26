@@ -3,6 +3,7 @@ PATH
   specs:
     capper (0.1.0)
       capistrano
+      capistrano_colors
       erubis
 
 GEM
@@ -14,6 +15,7 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
+    capistrano_colors (0.5.4)
     erubis (2.7.0)
     highline (1.6.2)
     net-scp (1.0.4)
