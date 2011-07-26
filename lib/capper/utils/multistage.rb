@@ -15,7 +15,7 @@ class Capper
 
         desc "Set the target stage to `#{name}'."
         task(name) do
-          set(:stage, name.to_sym)
+          set(:current_stage, name.to_sym)
           find_and_execute_task("multistage:#{name}")
         end
 

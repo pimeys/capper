@@ -13,11 +13,12 @@ Capper.load do
     task :setup, :except => {:no_release => true} do
       wo_gemset = rvm_ruby_string.gsub(/@.*/, '')
       run("if ! rvm list rubies | grep -q #{wo_gemset}; then " +
-          "rvm install #{rvm_ruby_string}; fi",
+          "rvm install #{rvm_ruby_string}; fi && " +
+          "rvm use --create #{rvm_ruby_string}",
           :shell => "/bin/bash -l")
 
       # this ensures that Gentoos declare -x RUBYOPT="-rauto_gem" is ignored.
-      run "touch ~/.rvm/rubies/#{rvm_ruby_string}/lib/ruby/site_ruby/auto_gem.rb"
+      run "touch ~/.rvm/rubies/#{wo_gemset}/lib/ruby/site_ruby/auto_gem.rb"
     end
 
     # prevents interactive rvm dialog
