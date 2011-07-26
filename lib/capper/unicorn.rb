@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../capper' unless defined?(Capper)
+require File.dirname(__FILE__) + '/base' unless defined?(Capper)
 
 # Unicorn capistrano controls.
 # See http://unicorn.bogomips.org/SIGNALS.html for signals that can be sent to unicorn.

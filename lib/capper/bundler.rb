@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../capper' unless defined?(Capper)
+require File.dirname(__FILE__) + '/base' unless defined?(Capper)
 require 'bundler/capistrano'
 
 # bundler requires rvm

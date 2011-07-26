@@ -1,4 +1,4 @@
-require 'capper' unless defined?(Capper)
+require File.dirname(__FILE__) + '/base' unless defined?(Capper)
 
 Capper.load do
   _cset(:config_repo) { abort "Please specify the config repository, set :config_repo, 'foo'" }

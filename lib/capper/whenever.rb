@@ -1,4 +1,4 @@
-require 'capper' unless defined?(Capper)
+require File.dirname(__FILE__) + '/base' unless defined?(Capper)
 
 # whenever requires bundler
 require 'capper/bundler'
