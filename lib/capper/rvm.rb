@@ -5,13 +5,14 @@ require 'rvm/capistrano'
 
 Capper.load do
   set(:rvm_type, :user)
-  set(:rvm_ruby_string, File.read(".rvmrc").gsub(/^rvm use --create (.*)@.*/, '\1').strip)
+  set(:rvm_ruby_string, File.read(".rvmrc").gsub(/^rvm use --create (.*)/, '\1').strip)
 
   namespace :rvm do
     # install the requested ruby if missing
     desc "Install the selected ruby version using RVM."
     task :setup, :except => {:no_release => true} do
-      run("if ! rvm list rubies | grep -q #{rvm_ruby_string}; then " +
+      wo_gemset = rvm_ruby_string.gsub(/@.*/, '')
+      run("if ! rvm list rubies | grep -q #{wo_gemset}; then " +
           "rvm install #{rvm_ruby_string}; fi",
           :shell => "/bin/bash -l")
 
