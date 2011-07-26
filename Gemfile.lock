@@ -1,22 +1,32 @@
+PATH
+  remote: .
+  specs:
+    capper (0.1.0)
+      capistrano
+      erubis
+
 GEM
   remote: http://rubygems.org/
   specs:
+    capistrano (2.6.0)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.1.0)
     erubis (2.7.0)
-    git (1.2.5)
-    jeweler (1.6.4)
-      bundler (~> 1.0)
-      git (>= 1.2.5)
-      rake
-    rake (0.9.2)
-    rcov (0.9.9)
-    shoulda (2.11.3)
+    highline (1.6.2)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-sftp (2.0.5)
+      net-ssh (>= 2.0.9)
+    net-ssh (2.1.4)
+    net-ssh-gateway (1.1.0)
+      net-ssh (>= 1.99.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bundler (~> 1.0.0)
-  erubis
-  jeweler (~> 1.6.4)
-  rcov
-  shoulda
+  capper!

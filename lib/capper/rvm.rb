@@ -20,11 +20,11 @@ Capper.load do
     end
 
     # prevents interactive rvm dialog
-    task :untrust_rvmrc, :except => {:no_release => true} do
-      run "rvm rvmrc untrust #{current_path}"
+    task :trust_rvmrc, :except => {:no_release => true} do
+      run "rvm rvmrc trust #{current_path}"
     end
   end
 
   on :start, "rvm:setup"
-  after "deploy:update_code", "rvm:untrust_rvmrc"
+  after "deploy:update_code", "rvm:trust_rvmrc"
 end

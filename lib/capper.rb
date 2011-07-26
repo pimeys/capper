@@ -8,12 +8,20 @@ require 'capper/utils/templates'
 
 # mixin various helpers
 include Capper::Utils::Templates
+include Capper::Utils::Multistage
+
+# helper method to load a block into the capistrano namespace
+class Capper
+  def self.load(&block)
+    Capistrano::Configuration.instance(true).load(&block)
+  end
+end
 
 # define a bunch of defaults that make sense
-Capistrano::Configuration.instance(true).load do
+Capper.load do
   # apps should not require root access
-  _cset(:use_sudo, false)
-  _cset(:group_writable, false)
+  set(:use_sudo, false)
+  set(:group_writable, false)
 
   # default app layout
   _cset(:user) { application }
@@ -23,10 +31,4 @@ Capistrano::Configuration.instance(true).load do
 
   # cleanup by default
   after "deploy:update", "deploy:cleanup"
-end
-
-class Capper
-  def self.load(&block)
-    Capistrano::Configuration.instance(true).load(&block)
-  end
 end

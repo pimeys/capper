@@ -3,6 +3,9 @@ require File.dirname(__FILE__) + '/../capper' unless defined?(Capper)
 # Unicorn capistrano controls.
 # See http://unicorn.bogomips.org/SIGNALS.html for signals that can be sent to unicorn.
 
+# unicorn requires bundler
+require 'capper/bundler'
+
 Capper.load do
   # unicorn configuration variables
   _cset(:unicorn_worker_processes, 4)
