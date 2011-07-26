@@ -33,13 +33,13 @@ Capper.load do
     task :update_crontab do
       on_rollback do
         if previous_release
-          run "cd #{previous_release} && #{whenever_command} #{whenever_update_flags}", options
+          run "cd #{previous_release} && #{whenever_command} #{whenever_update_flags}"
         else
-          run "cd #{release_path} && #{whenever_command} #{whenever_clear_flags}", options
+          run "cd #{release_path} && #{whenever_command} #{whenever_clear_flags}"
         end
       end
 
-      run "cd #{current_path} && #{whenever_command} #{whenever_update_flags}", options
+      run "cd #{current_path} && #{whenever_command} #{whenever_update_flags}"
     end
 
     desc <<-DESC
