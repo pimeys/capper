@@ -10,7 +10,7 @@ Capper.load do
 
   namespace :multistage do
     task :ensure do
-      unless exists?(:stage)
+      unless exists?(:current_stage)
         abort "No stage specified. Please specify one of: #{stages.join(', ')} (e.g. `cap #{stages.first} #{ARGV.last}')"
       end
     end
