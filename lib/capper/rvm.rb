@@ -25,6 +25,6 @@ Capper.load do
     end
   end
 
-  on :start, "rvm:setup"
+  before "deploy:setup", "rvm:setup"
   after "deploy:update_code", "rvm:trust_rvmrc"
 end

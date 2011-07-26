@@ -4,18 +4,14 @@ unless Capistrano::Configuration.respond_to?(:instance)
   abort "capper requires Capistrano 2"
 end
 
-require 'capper/utils/templates'
-
 # mixin various helpers
-include Capper::Utils::Templates
-include Capper::Utils::Multistage
+require 'capper/utils/load'
 
-# helper method to load a block into the capistrano namespace
-class Capper
-  def self.load(&block)
-    Capistrano::Configuration.instance(true).load(&block)
-  end
-end
+require 'capper/utils/templates'
+include Capper::Utils::Templates
+
+require 'capper/utils/multistage'
+include Capper::Utils::Multistage
 
 # define a bunch of defaults that make sense
 Capper.load do
