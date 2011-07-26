@@ -11,9 +11,12 @@ Capper.load do
   _cset(:unicorn_worker_processes, 4)
   _cset(:unicorn_backlog, 64)
 
+  # unicorn/nginx configuration variables
+  _cset(:nginx_port) { abort "Please specify the nginx port for unicorn and static files, set :nginx_port, 3000" }
+
   # these cannot be overriden
   set(:unicorn_script) { "#{bin_path}/unicorn" }
-  set(:unicorn_config) { "#{shared_path}/config/unicorn.rb" }
+  set(:unicorn_config) { "#{config_path}/unicorn.rb" }
   set(:unicorn_pidfile) { "#{shared_path}/pids/unicorn.pid" }
 
   namespace :deploy do
@@ -40,6 +43,8 @@ Capper.load do
                       :mode => "0644", :prefix => "unicorn")
       upload_template("unicorn.sh", unicorn_script,
                       :mode => "0755", :prefix => "unicorn")
+      upload_template("unicorn.nginx.conf", config_path + "/nginx.conf",
+                      :mode => "0644", :prefix => "nginx")
     end
 
     desc "Kill unicorn (this should only be used if all else fails)"

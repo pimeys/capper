@@ -23,6 +23,7 @@ Capper.load do
   _cset(:user) { application }
   _cset(:bin_path) { File.join(deploy_to, "bin") }
   _cset(:base_path) { "/var/app" }
+  _cset(:config_path) { "#{shared_path}/config" }
   set(:deploy_to) { "#{base_path}/#{application}" }
 
   # cleanup by default
