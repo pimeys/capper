@@ -15,7 +15,6 @@ class Capper
         end
 
         erb = Erubis::Eruby.new(File.open(template).read)
-        prefix = options.delete(:prefix)
 
         if task = current_task
           servers = find_servers_for_task(task, options)
@@ -28,7 +27,7 @@ class Capper
         end
 
         servers.each do |server|
-          result = erb.result(get_binding(prefix, server.host))
+          result = erb.result(get_binding(server.host))
           put(result, path, options.merge!(:host => server.host))
         end
       end
@@ -39,19 +38,16 @@ class Capper
       #   "app1.example.com" => 4,
       #   "app2.example.com" => 8,
       # }
-      def get_binding(prefix, server)
+      def get_binding(server)
         b = binding()
 
-        variables.keys.select do |k|
-          k =~ /^#{prefix}_/
-        end.each do |k|
-          new_k = k.to_s.gsub(/^#{prefix}_/, '')
-          new_v = fetch(k)
+        variables.keys.each do |k|
+          v = fetch(k)
 
-          if new_v.kind_of?(Hash)
-            eval("set(:#{new_k}, \"#{new_v[server] || new_v["default"]}\")", b)
+          if v.kind_of?(Hash)
+            eval("set(:#{k}, \"#{v[server] || v["default"]}\")", b)
           else
-            eval("set(:#{new_k}, \"#{new_v}\")", b)
+            eval("set(:#{k}, \"#{v}\")", b)
           end
         end
 

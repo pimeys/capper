@@ -37,9 +37,9 @@ Capper.load do
     desc "Generate unicorn configuration files"
     task :setup, :roles => :app, :except => { :no_release => true } do
       upload_template("unicorn.rb", unicorn_config,
-                      :mode => "0644", :prefix => "unicorn")
+                      :mode => "0644")
       upload_template("unicorn.sh", unicorn_script,
-                      :mode => "0755", :prefix => "unicorn")
+                      :mode => "0755")
     end
 
     desc "Kill unicorn (this should only be used if all else fails)"
