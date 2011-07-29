@@ -19,7 +19,7 @@ class Capper
           find_and_execute_task("multistage:#{name}")
         end
 
-        set(:stages, [stages, name].flatten.sort)
+        set(:stages, [stages, name].flatten)
       end
 
     end
