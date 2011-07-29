@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    capper (0.2.2)
+    capper (0.2.3)
       capistrano
       capistrano_colors
       erubis
