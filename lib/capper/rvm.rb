@@ -30,7 +30,7 @@ Capper.load do
     end
   end
 
-  before "rvm:setup", "gem:setup"
+  before "rvm:setup", "gemrc:setup"
   before "deploy:setup", "rvm:setup"
   after "deploy:symlink", "rvm:trust_rvmrc"
 end
