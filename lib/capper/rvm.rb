@@ -3,6 +3,8 @@ require File.dirname(__FILE__) + '/base' unless defined?(Capper)
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require 'rvm/capistrano'
 
+require "capper/gem"
+
 Capper.load do
   set(:rvm_type, :user)
   set(:rvm_ruby_string, File.read(".rvmrc").gsub(/^rvm use --create (.*)/, '\1').strip)
@@ -28,6 +30,7 @@ Capper.load do
     end
   end
 
+  before "rvm:setup", "gem:setup"
   before "deploy:setup", "rvm:setup"
   after "deploy:symlink", "rvm:trust_rvmrc"
 end
