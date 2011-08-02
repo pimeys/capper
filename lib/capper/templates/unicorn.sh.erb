@@ -7,7 +7,7 @@ PIDFILE=<%= shared_path %>/pids/unicorn.pid
 CONFIG=<%= shared_path %>/config/unicorn.rb
 CMD="bundle exec unicorn -c $CONFIG -E $RAILS_ENV -D config.ru"
 
-cd <%= current_path %>
+cd <%= current_path %> >/dev/null
 
 sig () {
   test -s "$PIDFILE" && kill -$1 $(<$PIDFILE)

@@ -16,7 +16,7 @@ Capper.load do
       wo_gemset = rvm_ruby_string.gsub(/@.*/, '')
       run("if ! rvm list rubies | grep -q #{wo_gemset}; then " +
           "rvm install #{rvm_ruby_string}; fi && " +
-          "rvm use --create #{rvm_ruby_string}",
+          "rvm use --create #{rvm_ruby_string} >/dev/null",
           :shell => "/bin/bash -l")
 
       # this ensures that Gentoos declare -x RUBYOPT="-rauto_gem" is ignored.
