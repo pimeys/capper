@@ -4,10 +4,10 @@ unless Capistrano::Configuration.respond_to?(:instance)
   abort "capper requires Capistrano 2"
 end
 
-# add some nice colors
-require "capistrano_colors"
-
 # mixin various helpers
+require 'capistrano_colors/configuration'
+require 'capistrano_colors/logger'
+
 require 'capper/utils/load'
 
 require 'capper/utils/templates'
@@ -18,6 +18,24 @@ include Capper::Utils::Multistage
 
 # define a bunch of defaults that make sense
 Capper.load do
+  # do not trace by default
+  logger.level = Capistrano::Logger::DEBUG
+
+  # add custom color scheme
+  colorize([
+    { :match => /executing `.*/,             :color => :yellow,  :level => 2, :prio => -10, :attribute => :bright, :prepend => "== Currently " },
+    { :match => /executing ".*/,             :color => :magenta, :level => 2, :prio => -20 },
+    { :match => /sftp upload complete/,      :color => :hide,    :level => 2, :prio => -20 },
+
+    { :match => /^transaction:.*/,           :color => :blue,    :level => 1, :prio => -10, :attribute => :bright },
+    { :match => /.*out\] (fatal:|ERROR:).*/, :color => :red,     :level => 1, :prio => -10 },
+    { :match => /Permission denied/,         :color => :red,     :level => 1, :prio => -20 },
+    { :match => /sh: .+: command not found/, :color => :magenta, :level => 1, :prio => -30 },
+
+    { :match => /^err ::/,                   :color => :red,     :level => 0, :prio => -10 },
+    { :match => /.*/,                        :color => :blue,    :level => 0, :prio => -20, :attribute => :bright },
+  ])
+
   # apps should not require root access
   set(:use_sudo, false)
   set(:group_writable, false)
