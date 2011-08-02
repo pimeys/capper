@@ -5,6 +5,9 @@ require 'bundler/capistrano'
 require "capper/rvm"
 
 Capper.load do
+  # always execute rake with bundler to make sure we use the right version
+  set(:rake, "bundle exec rake")
+
   # do not install a global bundle
   # instead, use the gemset selected by rvm_ruby_string
   set(:bundle_dir) { File.join(shared_path, 'bundle', rvm_ruby_string) }
