@@ -64,8 +64,9 @@ Capper.load do
       will not destroy any deployed revisions or data.
     DESC
     task :setup, :except => { :no_release => true } do
+      shared = %w(system log pids) | shared_children
       dirs = [releases_path, shared_path]
-      dirs += shared_children.map { |d| File.join(shared_path, d) }
+      dirs += shared.map { |d| File.join(shared_path, d) }
       run "mkdir -p #{dirs.join(' ')}"
     end
   end
