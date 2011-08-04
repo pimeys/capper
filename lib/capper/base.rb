@@ -47,6 +47,9 @@ Capper.load do
   _cset(:config_path) { "#{shared_path}/config" }
   set(:deploy_to) { "#{base_path}/#{application}" }
 
+  # do not clobber asset timestamps by default
+  _cset(:normalize_asset_timestamps, false)
+
   # cleanup by default
   after "deploy:update", "deploy:cleanup"
 
