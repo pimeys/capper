@@ -53,6 +53,12 @@ Capper.load do
   # cleanup by default
   after "deploy:update", "deploy:cleanup"
 
+  # set proper unicode locale, so gemspecs with unicode chars will not crash
+  # bundler. see https://github.com/capistrano/capistrano/issues/70
+  _cset(:default_environment, { 'LANG' => 'en_US.UTF-8' })
+
+  # overwrite deploy:setup to get rid of the annoying chmod g+w which makes ssh
+  # logins impossible
   namespace :deploy do
     desc <<-DESC
       Prepares one or more servers for deployment. Before you can use any \
