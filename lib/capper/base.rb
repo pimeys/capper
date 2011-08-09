@@ -45,13 +45,10 @@ Capper.load do
   _cset(:bin_path) { File.join(deploy_to, "bin") }
   _cset(:base_path) { "/var/app" }
   _cset(:config_path) { "#{shared_path}/config" }
-  set(:deploy_to) { "#{base_path}/#{application}" }
+  _cset(:deploy_to) { "#{base_path}/#{application}" }
 
   # do not clobber asset timestamps by default
   _cset(:normalize_asset_timestamps, false)
-
-  # cleanup by default
-  after "deploy:update", "deploy:cleanup"
 
   # set proper unicode locale, so gemspecs with unicode chars will not crash
   # bundler. see https://github.com/capistrano/capistrano/issues/70
@@ -79,4 +76,7 @@ Capper.load do
       run "mkdir -p #{dirs.join(' ')}"
     end
   end
+
+  # cleanup by default
+  after "deploy:update", "deploy:cleanup"
 end
