@@ -45,7 +45,7 @@ Capper.load do
   _cset(:bin_path) { File.join(deploy_to, "bin") }
   _cset(:base_path) { "/var/app" }
   _cset(:config_path) { "#{shared_path}/config" }
-  _cset(:deploy_to) { "#{base_path}/#{application}" }
+  set(:deploy_to) { "#{base_path}/#{application}" }
 
   # do not clobber asset timestamps by default
   _cset(:normalize_asset_timestamps, false)
