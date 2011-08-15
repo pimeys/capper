@@ -14,10 +14,14 @@ Capper.load do
     desc "Install the selected ruby version using RVM."
     task :setup, :except => {:no_release => true} do
       wo_gemset = rvm_ruby_string.gsub(/@.*/, '')
-      run("if ! rvm list rubies | grep -q #{wo_gemset}; then " +
-          "rvm install #{rvm_ruby_string}; fi && " +
+
+      run("echo silent > ~/.curlrc", :shell => "/bin/bash")
+      run("source ~/.rvm/scripts/rvm && " +
+          "if ! rvm list rubies | grep -q #{wo_gemset}; then " +
+          "rvm install #{wo_gemset}; fi && " +
           "rvm use --create #{rvm_ruby_string} >/dev/null",
-          :shell => "/bin/bash -l")
+          :shell => "/bin/bash")
+      run("rm ~/.curlrc")
 
       # this ensures that Gentoos declare -x RUBYOPT="-rauto_gem" is ignored.
       run "touch ~/.rvm/rubies/#{wo_gemset}/lib/ruby/site_ruby/auto_gem.rb"
