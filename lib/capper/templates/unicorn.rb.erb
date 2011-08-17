@@ -46,8 +46,15 @@ end
 before_fork do |server, worker|
   # the following is highly recomended for Rails + "preload_app true"
   # as there's no need for the master process to hold a connection
-  defined?(ActiveRecord::Base) and
+  if defined?(ActiveRecord::Base)
     ActiveRecord::Base.connection.disconnect!
+  end
+
+  if defined?(DataObjects::Pooling)
+    DataObjects::Pooling.pools.each do |pool|
+      pool.dispose
+    end
+  end
 
   # This allows a new master process to incrementally
   # phase out the old master process with SIGTTOU to avoid a
@@ -66,8 +73,13 @@ end
 
 after_fork do |server, worker|
   # the following is *required* for Rails + "preload_app true",
-  defined?(ActiveRecord::Base) and
+  if defined?(ActiveRecord::Base)
     ActiveRecord::Base.establish_connection
+  end
+
+  if Rails.cache.is_a?(ActiveSupport::Cache::DalliStore)
+    Rails.cache.reset
+  end
 
   # if preload_app is true, then you may also want to check and
   # restart any other shared sockets/descriptors such as Memcached,
