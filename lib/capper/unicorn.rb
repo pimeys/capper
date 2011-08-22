@@ -12,15 +12,15 @@ Capper.load do
   _cset(:unicorn_backlog, 64)
 
   # these cannot be overriden
-  set(:unicorn_script) { "#{bin_path}/unicorn" }
-  set(:unicorn_config) { "#{config_path}/unicorn.rb" }
-  set(:unicorn_pidfile) { "#{shared_path}/pids/unicorn.pid" }
+  set(:unicorn_script) { File.join(bin_path, "unicorn") }
+  set(:unicorn_config) { File.join(config_path, "unicorn.rb") }
+  set(:unicorn_pidfile) { File.join(pid_path, "unicorn.pid") }
 
   monit_config "unicorn", <<EOF
 check process unicorn
-  with pidfile "<%= shared_path %>/pids/unicorn.pid"
-  start program = "<%= bin_path %>/unicorn start" with timeout 60 seconds
-  stop program = "<%= bin_path %>/unicorn stop"
+  with pidfile "<%= unicorn_pidfile %>"
+  start program = "<%= unicorn_script %> start" with timeout 60 seconds
+  stop program = "<%= unicorn_script %> stop"
 EOF
 
   namespace :deploy do
