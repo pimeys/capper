@@ -4,9 +4,7 @@ require 'capper/bundler'
 
 Capper.load do
   # unicorn configuration variables
-  _cset(:delayed_job_workers) do
-    { :all => nil }
-  end
+  _cset(:delayed_job_workers, {})
 
   # these cannot be overriden
   set(:delayed_job_script) { File.join(bin_path, "delayed_job") }
