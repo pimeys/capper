@@ -50,9 +50,6 @@ Capper.load do
   _cset(:config_path) { "#{shared_path}/config" }
   set(:deploy_to) { "#{base_path}/#{application}" }
 
-  # do not clobber asset timestamps by default
-  _cset(:normalize_asset_timestamps, false)
-
   # set proper unicode locale, so gemspecs with unicode chars will not crash
   # bundler. see https://github.com/capistrano/capistrano/issues/70
   _cset(:default_environment, { 'LANG' => 'en_US.UTF-8' })
