@@ -5,8 +5,14 @@ Capper.load do
 
   namespace :monit do
     task :setup do
-      str = fetch(:monit_configs, {}).join("\n\n")
-      upload_template_string(str, monitrc, :mode => "0644")
+      configs = []
+
+      fetch(:monit_configs, {}).each do |name, body|
+        configs << "# #{name}\n#{body}"
+      end
+
+      upload_template_string(configs.join("\n\n"),
+                             monitrc, :mode => "0644")
     end
 
     task :reload do

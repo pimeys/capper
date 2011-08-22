@@ -3,7 +3,7 @@ class Capper
     module Monit
 
       def monit_config(name, body)
-        set(:monit_configs, fetch(:monit_configs, []) << "# #{name}\n#{body}")
+        set(:monit_configs, fetch(:monit_configs, {}).merge(name => body))
       end
 
     end
