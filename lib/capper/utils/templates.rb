@@ -7,14 +7,19 @@ class Capper
       # render an erb template from config/deploy/templates to the current
       # server list. this will render and upload templates serially using a
       # server-specific @variables binding. see get_binding for details.
-      def upload_template(name, path, options={})
+      def upload_template_file(name, path, options={})
         template = "config/deploy/templates/#{name}.erb"
 
         unless File.exist?(template)
           template = File.expand_path("../../templates/#{name}.erb", __FILE__)
         end
 
-        erb = Erubis::Eruby.new(File.open(template).read)
+        str = File.open(template).read
+        upload_template_string(str, path, options)
+      end
+
+      def upload_template_string(str, path, options={})
+        erb = Erubis::Eruby.new(str)
         prefix = options.delete(:prefix)
 
         if task = current_task
