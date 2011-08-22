@@ -16,6 +16,9 @@ include Capper::Utils::Templates
 require 'capper/utils/multistage'
 include Capper::Utils::Multistage
 
+require 'capper/utils/monit'
+include Capper::Utils::Monit
+
 # define a bunch of defaults that make sense
 Capper.load do
   # do not trace by default

@@ -16,6 +16,13 @@ Capper.load do
   set(:unicorn_config) { "#{config_path}/unicorn.rb" }
   set(:unicorn_pidfile) { "#{shared_path}/pids/unicorn.pid" }
 
+  monit_config "unicorn", <<EOF
+check process unicorn
+  with pidfile "<%= shared_path %>/pids/unicorn.pid"
+  start program = "<%= bin_path %>/unicorn start" with timeout 60 seconds
+  stop program = "<%= bin_path %>/unicorn stop"
+EOF
+
   namespace :deploy do
     desc "Start unicorn"
     task :start, :roles => :app, :except => { :no_release => true } do
