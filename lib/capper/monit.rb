@@ -5,15 +5,16 @@ Capper.load do
 
   namespace :monit do
     task :setup do
-      configs = []
+      configs = fetch(:monit_configs, {})
 
-      fetch(:monit_configs, {}).each do |name, body|
-        configs << "# #{name}\n#{body}"
+      upload_template(monitrc, :mode => "0644") do |server|
+        configs.keys.select do |name|
+          options = configs[name][:options].merge(:hosts => server.host)
+          not find_servers(options).empty?
+        end.map do |name|
+          "# #{name}\n#{configs[name][:body]}"
+        end.join("\n\n")
       end
-
-      upload_template_string(configs.join("\n\n"),
-                             monitrc,
-                             :mode => "0644")
     end
 
     task :reload do

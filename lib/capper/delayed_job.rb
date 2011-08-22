@@ -9,7 +9,7 @@ Capper.load do
   # these cannot be overriden
   set(:delayed_job_script) { File.join(bin_path, "delayed_job") }
 
-  monit_config "delayed_job", <<EOF
+  monit_config "delayed_job", <<EOF, :roles => :worker
 <% delayed_job_workers.each do |name, range| %>
 check process delayed_job_<%= name %>
   with pidfile <%= pid_path %>/delayed_job.<%= name %>.pid
@@ -27,7 +27,7 @@ EOF
 
   namespace :delayed_job do
     desc "Generate delayed_job configuration files"
-    task :setup, :roles => :app, :except => { :no_release => true } do
+    task :setup, :except => { :no_release => true } do
       upload_template_file("delayed_job.sh",
                            delayed_job_script,
                            :mode => "0755")

@@ -19,8 +19,12 @@ class Capper
       end
 
       def upload_template_string(str, path, options={})
-        erb = Erubis::Eruby.new(str)
+        upload_template(path, options) do |server|
+          str
+        end
+      end
 
+      def upload_template(path, options={})
         if task = current_task
           servers = find_servers_for_task(task, options)
         else
@@ -32,6 +36,7 @@ class Capper
         end
 
         servers.each do |server|
+          erb = Erubis::Eruby.new(yield server)
           result = erb.result(binding())
           put(result, path, options.merge!(:host => server.host))
         end
