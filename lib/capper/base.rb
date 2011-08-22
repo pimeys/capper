@@ -45,10 +45,13 @@ Capper.load do
 
   # default app layout
   _cset(:user) { application }
-  _cset(:bin_path) { File.join(deploy_to, "bin") }
+
   _cset(:base_path) { "/var/app" }
-  _cset(:config_path) { "#{shared_path}/config" }
   set(:deploy_to) { "#{base_path}/#{application}" }
+
+  _cset(:bin_path) { File.join(deploy_to, "bin") }
+  _cset(:pid_path) { File.join(shared_path, "pids") }
+  _cset(:config_path) { File.join(shared_path, "config") }
 
   # set proper unicode locale, so gemspecs with unicode chars will not crash
   # bundler. see https://github.com/capistrano/capistrano/issues/70
