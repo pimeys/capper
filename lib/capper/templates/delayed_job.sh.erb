@@ -1,0 +1,19 @@
+#!/bin/bash
+export HOME=<%= deploy_to %>
+source <%= deploy_to %>/.rvm/scripts/rvm
+export RAILS_ENV=<%= rails_env %>
+
+cd <%= current_path %> >/dev/null
+
+CMD=$1 && shift
+ID=$1 && shift
+
+if [[ $# -ge 1 ]]; then
+  MIN="--min-priority $1" && shift
+fi
+
+if [[ $# -ge 1 ]]; then
+  MAX="--max-priority $1" && shift
+fi
+
+exec bundle exec ./script/delayed_job $1 --identifier $2 --pid-dir=<%= pid_path %> $MIN $MAX
