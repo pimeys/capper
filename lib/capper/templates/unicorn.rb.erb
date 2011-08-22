@@ -77,8 +77,12 @@ after_fork do |server, worker|
     ActiveRecord::Base.establish_connection
   end
 
-  if Rails.cache.is_a?(ActiveSupport::Cache::DalliStore)
-    Rails.cache.reset
+  if defined?(Rails)
+    if defined?(ActiveSupport::Cache::DalliStore)
+      if Rails.cache.is_a?(ActiveSupport::Cache::DalliStore)
+        Rails.cache.reset
+      end
+    end
   end
 
   # if preload_app is true, then you may also want to check and
