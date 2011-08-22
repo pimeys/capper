@@ -10,7 +10,7 @@ Capper.load do
     end
 
     task :reload do
-      run "monit reload"
+      run "monit reload &>/dev/null"
     end
   end
 
