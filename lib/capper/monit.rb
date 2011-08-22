@@ -11,8 +11,9 @@ Capper.load do
         configs << "# #{name}\n#{body}"
       end
 
-      upload_template_string(configs.join("\n\n"), monitrc,
-                             :mode => "0644", :prefix => "monit")
+      upload_template_string(configs.join("\n\n"),
+                             monitrc,
+                             :mode => "0644")
     end
 
     task :reload do

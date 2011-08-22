@@ -20,7 +20,6 @@ class Capper
 
       def upload_template_string(str, path, options={})
         erb = Erubis::Eruby.new(str)
-        prefix = options.delete(:prefix)
 
         if task = current_task
           servers = find_servers_for_task(task, options)
@@ -33,35 +32,10 @@ class Capper
         end
 
         servers.each do |server|
-          result = erb.result(get_binding(prefix, server.host))
+          result = erb.result(binding())
           put(result, path, options.merge!(:host => server.host))
         end
       end
-
-      # this allows for server specific variables. example:
-      #
-      # set :unicorn_worker_processes, {
-      #   "app1.example.com" => 4,
-      #   "app2.example.com" => 8,
-      # }
-      def get_binding(prefix, server)
-        b = binding()
-
-        variables.keys.select do |k|
-          k =~ /^#{prefix}_/
-        end.each do |k|
-          v = fetch(k)
-
-          if v.kind_of?(Hash)
-            eval("set(:#{k}, \"#{v[server] || v["default"]}\")", b)
-          else
-            eval("set(:#{k}, \"#{v}\")", b)
-          end
-        end
-
-        return b
-      end
-      private :get_binding
 
     end
   end

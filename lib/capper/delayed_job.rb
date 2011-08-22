@@ -28,8 +28,9 @@ EOF
   namespace :delayed_job do
     desc "Generate delayed_job configuration files"
     task :setup, :roles => :app, :except => { :no_release => true } do
-      upload_template_file("delayed_job.sh", delayed_job_script,
-                           :mode => "0755", :prefix => "delayed_job")
+      upload_template_file("delayed_job.sh",
+                           delayed_job_script,
+                           :mode => "0755")
     end
   end
 
