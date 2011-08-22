@@ -9,8 +9,8 @@ Capper.load do
 
       upload_template(monitrc, :mode => "0644") do |server|
         configs.keys.select do |name|
-          options = configs[name][:options].merge(:hosts => server.host)
-          not find_servers(options).empty?
+          options = configs[name][:options]
+          find_servers(options).include?(server)
         end.map do |name|
           "# #{name}\n#{configs[name][:body]}"
         end.join("\n\n")
