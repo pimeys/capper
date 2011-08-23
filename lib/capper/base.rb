@@ -30,6 +30,7 @@ Capper.load do
     { :match => /executing ".*/,             :color => :magenta, :level => 2, :prio => -20 },
     { :match => /sftp upload complete/,      :color => :hide,    :level => 2, :prio => -20 },
 
+    { :match => /sftp upload/,               :color => :hide,    :level => 1, :prio => -10 },
     { :match => /^transaction:.*/,           :color => :blue,    :level => 1, :prio => -10, :attribute => :bright },
     { :match => /.*out\] (fatal:|ERROR:).*/, :color => :red,     :level => 1, :prio => -10 },
     { :match => /Permission denied/,         :color => :red,     :level => 1, :prio => -20 },
