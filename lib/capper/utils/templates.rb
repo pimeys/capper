@@ -38,7 +38,7 @@ class Capper
         servers.each do |server|
           erb = Erubis::Eruby.new(yield server)
           result = erb.result(binding())
-          put(result, path, options.merge!(:host => server.host))
+          put(result, path, options.merge!(:hosts => server))
         end
       end
 
