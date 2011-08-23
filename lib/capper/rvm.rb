@@ -8,6 +8,7 @@ require "capper/gem"
 Capper.load do
   set(:rvm_type, :user)
   set(:rvm_ruby_string, File.read(".rvmrc").gsub(/^rvm use --create (.*)/, '\1').strip)
+  _cset(:rvm_rubygems_version, "1.6.2")
 
   namespace :rvm do
     # install the requested ruby if missing
@@ -25,6 +26,9 @@ Capper.load do
 
       # this ensures that Gentoos declare -x RUBYOPT="-rauto_gem" is ignored.
       run "touch ~/.rvm/rubies/#{wo_gemset}/lib/ruby/site_ruby/auto_gem.rb"
+
+      # freeze rubygems version
+      run("rvm rubygems #{rvm_rubygems_version}")
     end
 
     # prevents interactive rvm dialog

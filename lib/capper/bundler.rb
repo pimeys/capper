@@ -12,10 +12,15 @@ Capper.load do
   # instead, use the gemset selected by rvm_ruby_string
   set(:bundle_dir) { File.join(shared_path, 'bundle', rvm_ruby_string) }
 
+  # freeze bundler version
+  _cset(:bundler_version, "1.0.17")
+
   namespace :bundle do
     desc "Setup bundler"
     task :setup, :except => {:no_release => true} do
-      run "if ! gem query -i -n ^bundler$ >/dev/null; then gem install bundler; fi"
+      run "if ! gem query -i -n ^bundler$ -v #{bundler_version} >/dev/null; then " +
+          "gem install bundler -v #{bundler_version}; " +
+          "fi"
       run "mkdir -p #{bundle_dir}"
     end
   end
