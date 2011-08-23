@@ -10,5 +10,5 @@ Capper.load do
     end
   end
 
-  before "deploy:restart", "sass:update"
+  before "deploy:symlink", "sass:update"
 end
