@@ -16,7 +16,7 @@ working_directory "<%= current_path %>"
 listen "<%= shared_path %>/pids/unicorn.sock"
 
 # nuke workers after 30 seconds instead of 60 seconds (the default)
-timeout 30
+timeout <%= unicorn_timeout %>
 
 # Location of the pidfile. Should not be changed unless you
 # know what you are doing.

@@ -9,7 +9,7 @@ require 'capper/bundler'
 Capper.load do
   # unicorn configuration variables
   _cset(:unicorn_worker_processes, 4)
-  _cset(:unicorn_backlog, 64)
+  _cset(:unicorn_timeout, 30)
 
   # these cannot be overriden
   set(:unicorn_script) { File.join(bin_path, "unicorn") }
