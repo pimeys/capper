@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    capper (0.3.6)
+    capper (0.6.4)
       capistrano
       capistrano_colors
       erubis
@@ -9,20 +9,20 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    capistrano (2.6.0)
+    capistrano (2.8.0)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
-    capistrano_colors (0.5.4)
+    capistrano_colors (0.5.5)
     erubis (2.7.0)
     highline (1.6.2)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
-    net-ssh (2.1.4)
+    net-ssh (2.2.1)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
 
