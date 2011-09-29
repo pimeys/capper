@@ -1,0 +1,12 @@
+#!/bin/bash
+export HOME=<%= deploy_to %>
+source <%= deploy_to %>/.rvm/scripts/rvm
+export RAILS_ENV=<%= rails_env %>
+
+cd <%= current_path %> >/dev/null
+
+if [[ -e ./scripts/console ]]; then
+	exec bundle exec ruby ./script/console
+else
+	exec bundle exec ruby ./script/rails console
+fi
