@@ -9,17 +9,21 @@ Capper.load do
     end
   end
 
-  after "deploy:update_code" do
-    unless config_repo.nil?
-      run "cd #{config_path} && git pull -q"
-    end
+  namespace :config do
+    task :setup, :roles => :app, :except => { :no_release => true } do
+      unless config_repo.nil?
+        run "cd #{config_path} && git pull -q"
+      end
 
-    fetch(:config_files, []).each do |f|
-      run "cp #{config_path}/#{f} #{release_path}/config/"
-    end
+      fetch(:config_files, []).each do |f|
+        run "cp #{config_path}/#{f} #{release_path}/config/"
+      end
 
-    fetch(:symlinks, {}).each do |source, dest|
-      run "rm -rf #{release_path}/#{dest} && ln -nfs #{shared_path}/#{source} #{release_path}/#{dest}"
+      fetch(:symlinks, {}).each do |source, dest|
+        run "rm -rf #{release_path}/#{dest} && ln -nfs #{shared_path}/#{source} #{release_path}/#{dest}"
+      end
     end
   end
+
+  after "deploy:update_code", "config:setup"
 end
