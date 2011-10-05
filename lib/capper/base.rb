@@ -79,8 +79,16 @@ Capper.load do
       dirs += shared.map { |d| File.join(shared_path, d) }
       run "mkdir -p #{dirs.join(' ')}"
     end
+
+    desc "Create symlinks from shared to current"
+    task :symlink_shared, :roles => :app, :except => { :no_release => true } do
+      fetch(:symlinks, {}).each do |source, dest|
+        run "rm -rf #{release_path}/#{dest} && ln -nfs #{shared_path}/#{source} #{release_path}/#{dest}"
+      end
+    end
   end
 
   # cleanup by default
   after "deploy:update", "deploy:cleanup"
+  after "deploy:update_code", "deploy:symlink_shared"
 end

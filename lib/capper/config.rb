@@ -10,6 +10,7 @@ Capper.load do
   end
 
   namespace :config do
+    desc "Setup configuration files from config repo"
     task :setup, :roles => :app, :except => { :no_release => true } do
       unless config_repo.nil?
         run "cd #{config_path} && git pull -q"
@@ -17,10 +18,6 @@ Capper.load do
 
       fetch(:config_files, []).each do |f|
         run "cp #{config_path}/#{f} #{release_path}/config/"
-      end
-
-      fetch(:symlinks, {}).each do |source, dest|
-        run "rm -rf #{release_path}/#{dest} && ln -nfs #{shared_path}/#{source} #{release_path}/#{dest}"
       end
     end
   end
