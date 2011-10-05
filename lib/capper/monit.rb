@@ -4,6 +4,7 @@ Capper.load do
   set(:monitrc) { "#{deploy_to}/.monitrc.local" }
 
   namespace :monit do
+    desc "Setup monit configuration files"
     task :setup do
       configs = fetch(:monit_configs, {})
 
@@ -17,6 +18,7 @@ Capper.load do
       end
     end
 
+    desc "Reload monit configuration"
     task :reload do
       run "monit reload &>/dev/null && sleep 1"
     end
