@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = "capper"
-  s.version = "0.6.8"
+  s.version = "0.7.0"
   s.platform = Gem::Platform::RUBY
   s.licenses = ["MIT"]
   s.authors = ["Benedikt Böhm"]
