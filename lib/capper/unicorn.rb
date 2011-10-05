@@ -23,7 +23,17 @@ check process unicorn
   stop program = "<%= unicorn_script %> stop"
 EOF
 
-  namespace :deploy do
+  namespace :unicorn do
+    desc "Generate unicorn configuration files"
+    task :setup, :roles => :app, :except => { :no_release => true } do
+      upload_template_file("unicorn.rb",
+                           unicorn_config,
+                           :mode => "0644")
+      upload_template_file("unicorn.sh",
+                           unicorn_script,
+                           :mode => "0755")
+    end
+
     desc "Start unicorn"
     task :start, :roles => :app, :except => { :no_release => true } do
       run "#{unicorn_script} start"
@@ -37,18 +47,6 @@ EOF
     desc "Restart unicorn with zero downtime"
     task :restart, :roles => :app, :except => { :no_release => true } do
       run "#{unicorn_script} upgrade"
-    end
-  end
-
-  namespace :unicorn do
-    desc "Generate unicorn configuration files"
-    task :setup, :roles => :app, :except => { :no_release => true } do
-      upload_template_file("unicorn.rb",
-                           unicorn_config,
-                           :mode => "0644")
-      upload_template_file("unicorn.sh",
-                           unicorn_script,
-                           :mode => "0755")
     end
 
     desc "Kill unicorn (this should only be used if all else fails)"
@@ -73,4 +71,5 @@ EOF
   end
 
   after "deploy:update_code", "unicorn:setup"
+  after "deploy:restart", "unicorn:restart"
 end
