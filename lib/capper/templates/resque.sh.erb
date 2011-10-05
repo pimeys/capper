@@ -4,7 +4,7 @@ source <%= deploy_to %>/.rvm/scripts/rvm
 export RAILS_ENV=<%= rails_env %>
 
 WORKER="$1" && shift
-QUEUE="${1:-*}"
+QUEUE="$1" && shift
 
 PIDFILE=<%= pid_path %>/resque.${WORKER}.pid
 CMD="bundle exec rake environment resque:work QUEUE=${QUEUE} PIDFILE=${PIDFILE}"
