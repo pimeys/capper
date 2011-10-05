@@ -1,9 +1,10 @@
 require File.dirname(__FILE__) + '/base' unless defined?(Capper)
 
 require 'capper/bundler'
+require 'capper/monit'
 
 Capper.load do
-  # unicorn configuration variables
+  # configuration variables
   _cset(:delayed_job_workers, {})
 
   # these cannot be overriden
@@ -26,13 +27,19 @@ check process delayed_job_<%= name %>
 EOF
 
   namespace :delayed_job do
-    desc "Generate delayed_job configuration files"
+    desc "Generate DelayedJob configuration files"
     task :setup, :except => { :no_release => true } do
       upload_template_file("delayed_job.sh",
                            delayed_job_script,
                            :mode => "0755")
     end
+
+    desc "Restart DelayedJob workers"
+    task :restart, :roles => :worker, :except => { :no_release => true } do
+      run "monit -g delayed_job restart all"
+    end
   end
 
   after "deploy:update_code", "delayed_job:setup"
+  after "deploy:restart", "delayed_job:restart"
 end
