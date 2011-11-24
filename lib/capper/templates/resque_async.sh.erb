@@ -1,0 +1,30 @@
+#!/bin/bash
+export HOME=<%= deploy_to %>
+source <%= deploy_to %>/.rvm/scripts/rvm
+export RAILS_ENV=<%= rails_env %>
+
+WORKER="$1" && shift
+
+PIDFILE=<%= pid_path %>/resque_async.${WORKER}.pid
+CMD="bundle exec RAILS_ENV=<%= rails_env %> QUEUE=<%= worker_queue %> FIBERS=<%= fibers %> INTERVAL=<%= interval %> ruby script/resque_async.rb
+
+cd <%= current_path %> >/dev/null
+
+sig () {
+  test -s "$PIDFILE" && kill -$1 $(<$PIDFILE)
+}
+
+case $1 in
+start)
+  sig 0 && echo >&2 "Already running" && exit 0
+  exec $CMD
+  ;;
+stop)
+  sig TERM && exit 0
+  echo >&2 "Not running"
+  ;;
+*)
+  echo >&2 "Usage: $0 <start|stop>"
+  exit 1
+  ;;
+esac
