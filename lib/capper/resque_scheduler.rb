@@ -5,7 +5,7 @@ require 'capper/monit'
 
 Capper.load do
   # configuration variables
-  _cset(:resque_scheduler_workers, {})
+  _cset(:resque_scheduler_workers, [])
 
   # these cannot be overriden
   set(:resque_scheduler_script) { File.join(bin_path, "resque_scheduler") }
