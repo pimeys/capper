@@ -14,7 +14,7 @@ Capper.load do
 <% resque_async_workers.each do |name, opts| %>
 check process resque_async_<%= name %>
   with pidfile <%= pid_path %>/resque_async.<%= name %>.pid
-<% if queue.nil? %>
+<% if opts[:queue].nil? %>
   start program = "<%= resque_async_script %> <%= name %> * <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> start"
   stop program = "<%= resque_async_script %> <%= name %> * <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> stop"
 <% else %>
