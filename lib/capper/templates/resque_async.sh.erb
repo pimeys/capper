@@ -4,9 +4,12 @@ source <%= deploy_to %>/.rvm/scripts/rvm
 export RAILS_ENV=<%= rails_env %>
 
 WORKER="$1" && shift
+QUEUE="$1" && shift
+FIBERS="$1" && shift
+INTERVAL="$1" && shift
 
 PIDFILE=<%= pid_path %>/resque_async.${WORKER}.pid
-CMD="bundle exec RAILS_ENV=<%= rails_env %> QUEUE=<%= worker_queue %> FIBERS=<%= fibers %> INTERVAL=<%= interval %> ruby script/resque_async.rb
+CMD="bundle exec ruby script/resque_async.rb QUEUE=${QUEUE} FIBERS=${FIBERS} INTERVAL=${INTERVAL} PIDFILE=${PIDFILE}"
 
 cd <%= current_path %> >/dev/null
 

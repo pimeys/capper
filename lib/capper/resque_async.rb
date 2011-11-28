@@ -11,15 +11,15 @@ Capper.load do
   set(:resque_async_script) { File.join(bin_path, "resque_async") }
 
   monit_config "resque_async", <<EOF, :roles => :worker
-<% resque_async_workers.each do |name, queue| %>
+<% resque_async_workers.each do |name, opts| %>
 check process resque_async_<%= name %>
   with pidfile <%= pid_path %>/resque_async.<%= name %>.pid
 <% if queue.nil? %>
-  start program = "<%= resque_async_script %> <%= name %> * <%= fibers %> <%= interval %> start"
-  stop program = "<%= resque_async_script %> <%= name %> * <%= fibers %> <%= interval %> stop"
+  start program = "<%= resque_async_script %> <%= name %> * <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> start"
+  stop program = "<%= resque_async_script %> <%= name %> * <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> stop"
 <% else %>
-  start program = "<%= resque_async_script %> <%= name %> <%= queue %> <%= fibers %> <%= interval %> start"
-  stop program = "<%= resque_async_script %> <%= name %> <%= queue %> <%= fibers %> <%= interval %> stop"
+  start program = "<%= resque_async_script %> <%= name %> <%= opts[:queue] %> <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> start"
+  stop program = "<%= resque_async_script %> <%= name %> <%= opts[:queue] %> <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> stop"
 <% end %>
   group resque_async
 
