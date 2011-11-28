@@ -11,11 +11,11 @@ Capper.load do
   set(:resque_scheduler_script) { File.join(bin_path, "resque_scheduler") }
 
   monit_config "resque_scheduler", <<EOF, :roles => :worker
-<% resque_scheduler_workers.each do |name, queue| %>
+<% resque_scheduler_workers.each do |name| %>
 check process resque_scheduler_<%= name %>
   with pidfile <%= pid_path %>/resque_scheduler.<%= name %>.pid
-  start program = "<%= resque_scheduler_script %> <%= name %> <%= queue %> start"
-  stop program = "<%= resque_scheduler_script %> <%= name %> <%= queue %> stop"
+  start program = "<%= resque_scheduler_script %> <%= name %> start"
+  stop program = "<%= resque_scheduler_script %> <%= name %> stop"
   group resque_scheduler
 
 <% end %>
