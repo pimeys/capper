@@ -1,15 +1,15 @@
 #!/bin/bash
 export HOME=<%= deploy_to %>
 source <%= deploy_to %>/.rvm/scripts/rvm
-export RAILS_ENV=<%= rails_env %>
+export RAILS_ENV=<%= rails_env %>_async
 
 WORKER="$1" && shift
-QUEUE="$1" && shift
-FIBERS="$1" && shift
-INTERVAL="$1" && shift
+export QUEUE="$1" && shift
+export FIBERS="$1" && shift
+export INTERVAL="$1" && shift
 
-PIDFILE=<%= pid_path %>/resque_async.${WORKER}.pid
-CMD="bundle exec ruby script/resque_async.rb QUEUE=${QUEUE} FIBERS=${FIBERS} INTERVAL=${INTERVAL} PIDFILE=${PIDFILE}"
+export PIDFILE=<%= pid_path %>/resque_async.${WORKER}.pid
+CMD="bundle exec ruby script/resque_async.rb"
 
 cd <%= current_path %> >/dev/null
 
