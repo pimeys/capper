@@ -16,10 +16,10 @@ check process resque_async_<%= name %>
   with pidfile <%= pid_path %>/resque_async.<%= name %>.pid
 <% if opts[:queue].nil? %>
   start program = "<%= resque_async_script %> <%= name %> * <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> start"
-  stop program = "<%= resque_async_script %> <%= name %> * <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> stop"
+  stop program = "<%= resque_async_script %> <%= name %> * <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> stop" with timeout 180 seconds
 <% else %>
   start program = "<%= resque_async_script %> <%= name %> <%= opts[:queue] %> <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> start"
-  stop program = "<%= resque_async_script %> <%= name %> <%= opts[:queue] %> <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> stop"
+  stop program = "<%= resque_async_script %> <%= name %> <%= opts[:queue] %> <%= opts[:fibers] || 1 %> <%= opts[:interval] || 5 %> stop" with timeout 180 seconds
 <% end %>
   group resque_async
 
