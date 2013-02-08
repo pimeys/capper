@@ -26,7 +26,7 @@ check process puma_<%= i %>
   end.join("\n")
 
   monit_config "puma", config_script, :roles => :web
-EOF
+
 
   namespace :puma do
     desc "Generate puma configuration files"
