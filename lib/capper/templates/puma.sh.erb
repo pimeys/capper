@@ -1,0 +1,52 @@
+#!/bin/bash
+export HOME=<%= deploy_to %>
+source <%= deploy_to %>/.rvm/scripts/rvm
+export RAILS_ENV=<%= rails_env %>
+
+PROCESS_NAME="$1" && shift
+MIN_THREADS="$1" && shift
+MAX_THREADS="$1" && shift
+SOCKET="<%= pid_path %>/${PROCESS_NAME}.sock"
+
+export PIDFILE=<%= pid_path %>/${PROCESS_NAME}.pid
+
+<% if File.exists puma_config %>
+CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE -b $SOCKET -C <%= puma_config %>"
+<% else %>
+CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE"
+<% end %>
+
+cd <%= current_path %> >/dev/null
+
+sig () {
+  test -s "$PIDFILE" && kill -$1 $(<$PIDFILE)
+}
+
+case $1 in
+start)
+  sig 0 && echo >&2 "Already running" && exit 0
+  exec $CMD
+  ;;
+stop)
+  sig SIGTERM && exit 0
+  echo >&2 "Not running"
+  ;;
+restart)
+  sig SIGUSR2 && exit 0
+  echo >&2 "Couldn't restart, starting '$CMD' instead"
+  $CMD
+  ;;
+upgrade)
+  sig SIGUSR2 && exit 0
+  echo >&2 "Couldn't upgrade, starting '$CMD' instead"
+  $CMD
+  ;;
+kill)
+  sig SIGKILL && exit 0
+  echo >&2 "Couldn't kill"
+  ;;
+*)
+  echo >&2 "Usage: $0 <start|stop|restart|upgrade|kill>"
+  exit 1
+  ;;
+esac
