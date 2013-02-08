@@ -10,7 +10,7 @@ SOCKET="<%= pid_path %>/${PROCESS_NAME}.sock"
 
 export PIDFILE=<%= pid_path %>/${PROCESS_NAME}.pid
 
-<% if File.exists puma_config %>
+<% if File.exist?(puma_config) %>
 CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE -b $SOCKET -C <%= puma_config %>"
 <% else %>
 CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE"
