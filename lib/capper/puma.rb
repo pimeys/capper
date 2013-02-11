@@ -31,9 +31,6 @@ check process puma_<%= i %>
   namespace :puma do
     desc "Generate puma configuration files"
     task :setup, :roles => :app, :except => { :no_release => true } do
-      upload_template_file("puma.rb",
-                           puma_config,
-                           :mode => "0644")
       upload_template_file("puma.sh",
                            puma_script,
                            :mode => "0755")
