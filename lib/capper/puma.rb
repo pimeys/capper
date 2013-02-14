@@ -12,7 +12,6 @@ Capper.load do
   _cset(:puma_worker_processes, 1)
 
   # these cannot be overriden
-  set(:puma_script) { File.join(bin_path, "puma") }
   set(:puma_config) { File.join(config_path, "puma.rb") }
 
   config_script = (0..puma_worker_processes).map do |i|
@@ -31,29 +30,44 @@ check process puma_<%= i %>
   namespace :puma do
     desc "Generate puma configuration files"
     task :setup, :roles => :app, :except => { :no_release => true } do
-      upload_template_file("puma.sh",
-                           puma_script,
-                           :mode => "0755")
+      (0..puma_worker_processes).each do |i|
+        puma_script = File.join(bin_path, "puma#{i}")
+        upload_template_file("puma.sh",
+                             puma_script,
+                             :mode => "0755")
+      end
     end
 
     desc "Start puma"
     task :start, :roles => :app, :except => { :no_release => true } do
-      run "#{puma_script} start"
+      (0..puma_worker_processes).each do |i|
+        puma_script = File.join(bin_path, "puma#{i}")
+        run "#{puma_script} start"
+      end
     end
 
     desc "Stop puma"
     task :stop, :roles => :app, :except => { :no_release => true } do
-      run "#{puma_script} stop"
+      (0..puma_worker_processes).each do |i|
+        puma_script = File.join(bin_path, "puma#{i}")
+        run "#{puma_script} stop"
+      end
     end
 
     desc "Restart puma with zero downtime"
     task :restart, :roles => :app, :except => { :no_release => true } do
-      run "#{puma_script} upgrade"
+      (0..puma_worker_processes).each do |i|
+        puma_script = File.join(bin_path, "puma#{i}")
+        run "#{puma_script} upgrade"
+      end
     end
 
     desc "Kill puma (this should only be used if all else fails)"
     task :kill, :roles => :app, :except => { :no_release => true } do
-      run "#{puma_script} kill"
+      (0..puma_worker_processes).each do |i|
+        puma_script = File.join(bin_path, "puma#{i}")
+        run "#{puma_script} kill"
+      end
     end
   end
 

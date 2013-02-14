@@ -6,7 +6,8 @@ export RAILS_ENV=<%= rails_env %>
 PROCESS_NAME="$1" && shift
 MIN_THREADS="$1" && shift
 MAX_THREADS="$1" && shift
-SOCKET="<%= pid_path %>/${PROCESS_NAME}.sock"
+PROCESS_NUM=`echo $PROCESS_NAME | cut -d'_' -f2`
+SOCKET="tcp://0.0.0.0:$[PROCESS_NUM+9290]"
 
 export PIDFILE=<%= pid_path %>/${PROCESS_NAME}.pid
 
