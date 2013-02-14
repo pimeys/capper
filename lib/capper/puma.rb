@@ -14,7 +14,7 @@ Capper.load do
   # these cannot be overriden
   set(:puma_config) { File.join(config_path, "puma.rb") }
 
-  config_script = (0..puma_worker_processes).map do |i|
+  config_script = (1..puma_worker_processes).map do |i|
     <<-EOF
 check process puma_<%= i %>
   with pidfile <%= pid_path %>/puma_<%= i %>.pid
@@ -30,7 +30,7 @@ check process puma_<%= i %>
   namespace :puma do
     desc "Generate puma configuration files"
     task :setup, :roles => :app, :except => { :no_release => true } do
-      (0..puma_worker_processes).each do |i|
+      (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
         upload_template_file("puma.sh",
                              puma_script,
@@ -40,7 +40,7 @@ check process puma_<%= i %>
 
     desc "Start puma"
     task :start, :roles => :app, :except => { :no_release => true } do
-      (0..puma_worker_processes).each do |i|
+      (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
         run "#{puma_script} start"
       end
@@ -48,7 +48,7 @@ check process puma_<%= i %>
 
     desc "Stop puma"
     task :stop, :roles => :app, :except => { :no_release => true } do
-      (0..puma_worker_processes).each do |i|
+      (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
         run "#{puma_script} stop"
       end
@@ -56,7 +56,7 @@ check process puma_<%= i %>
 
     desc "Restart puma with zero downtime"
     task :restart, :roles => :app, :except => { :no_release => true } do
-      (0..puma_worker_processes).each do |i|
+      (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
         run "#{puma_script} upgrade"
       end
@@ -64,7 +64,7 @@ check process puma_<%= i %>
 
     desc "Kill puma (this should only be used if all else fails)"
     task :kill, :roles => :app, :except => { :no_release => true } do
-      (0..puma_worker_processes).each do |i|
+      (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
         run "#{puma_script} kill"
       end
