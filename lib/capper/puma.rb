@@ -39,7 +39,7 @@ check process puma_<%= i %>
     desc "Start puma"
     task :start, :roles => :app, :except => { :no_release => true } do
       (1..puma_worker_processes).each do |i|
-        run "monit start puma_#{i}"
+        run "monit start puma#{i}"
       end
     end
 
@@ -47,7 +47,7 @@ check process puma_<%= i %>
     task :stop, :roles => :app, :except => { :no_release => true } do
       (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
-        run "monit stop puma_#{i}"
+        run "monit stop puma#{i}"
       end
     end
 
@@ -55,7 +55,7 @@ check process puma_<%= i %>
     task :restart, :roles => :app, :except => { :no_release => true } do
       (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
-        run "monit restart puma_#{i}"
+        run "monit restart puma#{i}"
       end
     end
 
@@ -63,7 +63,7 @@ check process puma_<%= i %>
     task :kill, :roles => :app, :except => { :no_release => true } do
       (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
-        run "monit stop puma_#{i}"
+        run "monit stop puma#{i}"
       end
     end
   end
