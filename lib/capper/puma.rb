@@ -55,7 +55,7 @@ check process puma_<%= i %>
     task :restart, :roles => :app, :except => { :no_release => true } do
       (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
-        run "monit restart puma#{i}"
+        run "#{deploy_to}/bin/puma puma_#{i} #{puma_min_threads} #{puma_max_threads} restart"
       end
     end
 
