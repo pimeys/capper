@@ -14,7 +14,7 @@ export PIDFILE=<%= pid_path %>/${PROCESS_NAME}.pid
 <% if File.exist?(puma_config) %>
 CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE -b $SOCKET -C <%= puma_config %>"
 <% else %>
-CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE"
+CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE -b $SOCKET"
 <% end %>
 
 cd <%= current_path %> >/dev/null
