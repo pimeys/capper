@@ -42,7 +42,7 @@ check process puma_<%= i %>
     task :start, :roles => :app, :except => { :no_release => true } do
       (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
-        run "#{puma_script} start"
+        run "#{puma_script} puma_#{i} #{puma_min_threads} #{puma_max_threads} start"
       end
     end
 
@@ -50,7 +50,7 @@ check process puma_<%= i %>
     task :stop, :roles => :app, :except => { :no_release => true } do
       (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
-        run "#{puma_script} stop"
+        run "#{puma_script} puma_#{i} #{puma_min_threads} #{puma_max_threads} stop"
       end
     end
 
@@ -58,7 +58,7 @@ check process puma_<%= i %>
     task :restart, :roles => :app, :except => { :no_release => true } do
       (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
-        run "#{puma_script} upgrade"
+        run "#{puma_script} puma_#{i} #{puma_min_threads} #{puma_max_threads} upgrade"
       end
     end
 
@@ -66,7 +66,7 @@ check process puma_<%= i %>
     task :kill, :roles => :app, :except => { :no_release => true } do
       (1..puma_worker_processes).each do |i|
         puma_script = File.join(bin_path, "puma#{i}")
-        run "#{puma_script} kill"
+        run "#{puma_script} puma_#{i} #{puma_min_threads} #{puma_max_threads} kill"
       end
     end
   end
