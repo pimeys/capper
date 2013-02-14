@@ -12,7 +12,7 @@ Capper.load do
   _cset(:puma_worker_processes, 1)
 
   # these cannot be overriden
-  set(:puma_config) { File.join(config_path, "puma.rb") }
+  set(:puma_config) { File.join(deploy_to, "/script/puma_config.rb") }
 
   config_script = (1..puma_worker_processes).map do |i|
     <<-EOF
