@@ -30,12 +30,10 @@ check process puma_<%= i %>
   namespace :puma do
     desc "Generate puma configuration files"
     task :setup, :roles => :app, :except => { :no_release => true } do
-      (1..puma_worker_processes).each do |i|
-        puma_script = File.join(bin_path, "puma#{i}")
-        upload_template_file("puma.sh",
-                             puma_script,
-                             :mode => "0755")
-      end
+      puma_script = File.join(bin_path, "puma")
+      upload_template_file("puma.sh",
+                           puma_script,
+                           :mode => "0755")
     end
 
     desc "Start puma"
