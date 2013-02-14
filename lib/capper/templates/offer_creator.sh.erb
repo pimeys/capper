@@ -1,0 +1,29 @@
+#!/bin/bash
+export HOME=<%= deploy_to %>
+source <%= deploy_to %>/.rvm/scripts/rvm
+export RAILS_ENV=<%= rails_env %>
+
+export PIDFILE=<%= pid_path %>/offer_creator.pid
+CMD="bundle exec rake offer_creator:run"
+
+cd <%= current_path %> >/dev/null
+
+sig () {
+  test -s "$PIDFILE" && kill -$1 $(<$PIDFILE)
+}
+
+case $1 in
+start)
+  sig 0 && echo >&2 "Already running" && exit 0
+  exec $CMD
+  ;;
+stop)
+  sig TERM && exit 0
+  echo >&2 "Not running"
+  ;;
+*)
+  echo >&2 "Usage: $0 <start|stop>"
+  exit 1
+  ;;
+esac
+
