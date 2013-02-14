@@ -10,7 +10,8 @@ Capper.load do
   set(:offer_creator_script) { File.join(bin_path, "offer_creator") }
 
   monit_config "offer_creator", <<EOF, :roles => :worker
-with pidfile <%= pid_path %>/offer_creator.pid
+check process offer_creator
+  with pidfile <%= pid_path %>/offer_creator.pid
   start program = "<%= offer_creator_script %> start"
   stop program = "<%= offer_creator_script %> stop"
   group offer_creator
