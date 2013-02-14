@@ -34,13 +34,11 @@ stop)
   ;;
 restart)
   sig SIGUSR2 && exit 0
-  echo >&2 "Couldn't restart, starting '$CMD' instead"
-  $CMD
+  echo >&2 "Couldn't restart, starting with monit instead"
   ;;
 upgrade)
   sig SIGUSR2 && exit 0
-  echo >&2 "Couldn't upgrade, starting '$CMD' instead"
-  $CMD
+  echo >&2 "Couldn't upgrade, starting with monit instead"
   ;;
 kill)
   sig SIGKILL && exit 0
