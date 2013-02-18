@@ -12,7 +12,7 @@ SOCKET="tcp://0.0.0.0:$[PROCESS_NUM+9290]"
 export PIDFILE=<%= pid_path %>/${PROCESS_NAME}.pid
 export LOGFILE=<%= deploy_to %>/shared/log/${PROCESS_NAME}.log
 
-CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE -b $SOCKET -C <%= puma_config %> 2>&1 > $LOGFILE"
+CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE -b $SOCKET -C <%= puma_config %>"
 
 cd <%= current_path %> >/dev/null
 
@@ -23,7 +23,7 @@ sig () {
 case $1 in
 start)
   sig 0 && echo >&2 "Already running" && exit 0
-  $CMD
+  $CMD &> $LOGFILE
   ;;
 stop)
   sig SIGTERM && exit 0
