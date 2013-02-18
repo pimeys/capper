@@ -53,10 +53,7 @@ check process puma_<%= i %>
 
     desc "Restart puma with zero downtime"
     task :restart, :roles => :app, :except => { :no_release => true } do
-      (1..puma_worker_processes).each do |i|
-        puma_script = File.join(bin_path, "puma#{i}")
-        run "#{deploy_to}/bin/puma puma_#{i} #{puma_min_threads} #{puma_max_threads} restart"
-      end
+      run "kill -SIGUSR2 `cat #{pid_path}/puma_*.pid`"
     end
 
     desc "Kill puma (this should only be used if all else fails)"
