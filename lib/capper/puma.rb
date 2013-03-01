@@ -11,9 +11,9 @@ Capper.load do
   # puma configuration variables
   _cset(:pumas, {})
 
-  puma_min_threads = pumas[hostname.to_sym] ? pumas[hostname.to_sym][:min_threads] : 8
-  puma_min_threads = pumas[hostname.to_sym] ? pumas[hostname.to_sym][:max_threads] : 32
-  puma_min_threads = pumas[hostname.to_sym] ? pumas[hostname.to_sym][:workers] : 24
+  min_threads = pumas[hostname.to_sym] ? pumas[hostname.to_sym][:min_threads] : 8
+  max_threads = pumas[hostname.to_sym] ? pumas[hostname.to_sym][:max_threads] : 32
+  workers = pumas[hostname.to_sym] ? pumas[hostname.to_sym][:workers] : 24
 
   # these cannot be overriden
   set(:puma_config) { File.join(deploy_to, "/current/script/puma_config.rb") }
