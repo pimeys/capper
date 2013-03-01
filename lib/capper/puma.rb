@@ -4,10 +4,9 @@ require File.dirname(__FILE__) + '/base' unless defined?(Capper)
 # https://github.com/puma/puma
 
 require 'capper/bundler'
-require 'socket'
 
 Capper.load do
-  hostname = Socket.gethostname.split('.', 2).first
+  hostname = "$CAPISTRANO:HOST$".split('.', 2).first
   # puma configuration variables
   _cset(:pumas, {})
 
