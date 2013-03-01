@@ -4,15 +4,15 @@ source <%= deploy_to %>/.rvm/scripts/rvm
 export RAILS_ENV=<%= rails_env %>
 
 PROCESS_NAME="$1" && shift
+WORKERS="$1" && shift
 MIN_THREADS="$1" && shift
 MAX_THREADS="$1" && shift
-PROCESS_NUM=`echo $PROCESS_NAME | cut -d'_' -f2`
-SOCKET="tcp://0.0.0.0:$[PROCESS_NUM+9290]"
+SOCKET="tcp://0.0.0.0:$[9290]"
 
 export PIDFILE=<%= pid_path %>/${PROCESS_NAME}.pid
 export LOGFILE=<%= deploy_to %>/shared/log/${PROCESS_NAME}.log
 
-CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE -b $SOCKET -C <%= puma_config %>"
+CMD="bundle exec puma -t $MIN_THREADS:$MAX_THREADS -e $RAILS_ENV --pidfile $PIDFILE -b $SOCKET -C <%= puma_config %> -w $WORKERS -d"
 
 cd <%= current_path %> >/dev/null
 
@@ -30,12 +30,14 @@ stop)
   echo >&2 "Not running"
   ;;
 restart)
-  sig SIGUSR2 && exit 0
-  echo >&2 "Couldn't restart, starting with monit instead"
+  sig SIGUSR1 && exit 0
+  echo >&2 "Couldn't restart, starting with '$CMD' instead"
+  $CMD &> $LOGFILE
   ;;
 upgrade)
-  sig SIGUSR2 && exit 0
-  echo >&2 "Couldn't upgrade, starting with monit instead"
+  sig SIGUSR1 && exit 0
+  echo >&2 "Couldn't upgrade, starting with '$CMD' instead"
+  $CMD &> $LOGFILE
   ;;
 kill)
   sig SIGKILL && exit 0

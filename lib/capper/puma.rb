@@ -4,28 +4,29 @@ require File.dirname(__FILE__) + '/base' unless defined?(Capper)
 # https://github.com/puma/puma
 
 require 'capper/bundler'
+require 'socket'
 
 Capper.load do
+  hostname = Socket.gethostname.split('.', 2).first
   # puma configuration variables
-  _cset(:puma_min_threads, 1)
-  _cset(:puma_max_threads, 4)
-  _cset(:puma_worker_processes, 1)
+  _cset(:pumas, {})
+
+  puma_min_threads = pumas[hostname.to_sym] ? pumas[hostname.to_sym][:min_threads] : 8
+  puma_min_threads = pumas[hostname.to_sym] ? pumas[hostname.to_sym][:max_threads] : 32
+  puma_min_threads = pumas[hostname.to_sym] ? pumas[hostname.to_sym][:workers] : 24
 
   # these cannot be overriden
   set(:puma_config) { File.join(deploy_to, "/current/script/puma_config.rb") }
 
-  config_script = (1..puma_worker_processes).map do |i|
-    <<-EOF
-check process puma_<%= i %>
-  with pidfile <%= pid_path %>/puma_<%= i %>.pid
-  start program = "<%= puma_script %> puma_<%= i %> <%= puma_min_threads %> <%= max_threads %> start"
-  stop program = "<%= puma_script %> puma_<%= i %> <%= puma_min_threads %> <%= max_threads %> stop"
+  config_script = <<-EOF
+check process puma
+  with pidfile <%= pid_path %>/puma.pid
+  start program = "<%= puma_script %> puma <%= workers %> <%= min_threads %> <%= max_threads %> start"
+  stop program = "<%= puma_script %> puma <%= workers %> <%= min_threads %> <%= max_threads %> stop"
   group pumas
-    EOF
-  end.join("\n")
+EOF
 
   monit_config "puma", config_script, :roles => :web
-
 
   namespace :puma do
     desc "Generate puma configuration files"
@@ -38,33 +39,22 @@ check process puma_<%= i %>
 
     desc "Start puma"
     task :start, :roles => :app, :except => { :no_release => true } do
-      (1..puma_worker_processes).each do |i|
-        run "monit start puma#{i}"
-      end
+      run "#{deploy_to}/bin/puma puma #{workers} #{min_threads} #{max_threads} start"
     end
 
     desc "Stop puma"
     task :stop, :roles => :app, :except => { :no_release => true } do
-      (1..puma_worker_processes).each do |i|
-        puma_script = File.join(bin_path, "puma#{i}")
-        run "monit stop puma#{i}"
-      end
+      run "#{deploy_to}/bin/puma puma #{workers} #{min_threads} #{max_threads} stop"
     end
 
     desc "Restart puma with zero downtime"
     task :restart, :roles => :app, :except => { :no_release => true } do
-      (1..puma_worker_processes).each do |i|
-        puma_script = File.join(bin_path, "puma#{i}")
-        run "#{deploy_to}/bin/puma puma_#{i} #{puma_min_threads} #{puma_max_threads} restart"
-      end
+      run "#{deploy_to}/bin/puma puma #{workers} #{min_threads} #{max_threads} restart"
     end
 
     desc "Kill puma (this should only be used if all else fails)"
     task :kill, :roles => :app, :except => { :no_release => true } do
-      (1..puma_worker_processes).each do |i|
-        puma_script = File.join(bin_path, "puma#{i}")
-        run "monit stop puma#{i}"
-      end
+      run "#{deploy_to}/bin/puma puma #{workers} #{min_threads} #{max_threads} stop"
     end
   end
 
