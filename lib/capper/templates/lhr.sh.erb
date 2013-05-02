@@ -6,7 +6,7 @@ export INTERVAL="$1" && shift
 export LOG_FILE="$1" && shift
 export PIDFILE=<%= pid_path %>/lhr.pid
 
-CMD="bundle exec ruby -Ilib sync.rb -i ${INTERVAL} --log-file ${LOG_FILE} --pid-file ${PIDFILE}"
+CMD="bundle exec ruby -Ilib sync.rb -d -i ${INTERVAL} --log-file ${LOG_FILE} --pid-file ${PIDFILE}"
 
 cd <%= current_path %> >/dev/null
 

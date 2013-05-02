@@ -13,7 +13,7 @@ Capper.load do
 check process lhr
   with pidfile <%= pid_path %>/lhr.pid
   start program = "<%= lhr_script %> <%= debug %> <%= interval %> <%= log_file %> start"
-  stop program = "<%= lhr_script %> <%= debug %> <%= interval %> <%= log_file %> stop" with timeout 180 seconds
+  stop program = "<%= lhr_script %> <%= debug %> <%= interval %> <%= log_file %> stop"
   if totalmem > 3200 MB then restart
 EOF
 
