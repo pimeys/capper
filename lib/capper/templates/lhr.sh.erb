@@ -1,0 +1,31 @@
+#!/bin/bash
+export HOME=<%= deploy_to %>
+source <%= deploy_to %>/.rvm/scripts/rvm
+
+export INTERVAL="$1" && shift
+export LOG_FILE="$1" && shift
+export PIDFILE=<%= pid_path %>/lhr.pid
+
+CMD="bundle exec ruby -Ilib sync.rb -i ${INTERVAL} --log-file ${LOG_FILE} --pid-file ${PIDFILE}"
+
+cd <%= current_path %> >/dev/null
+
+sig () {
+  test -s "$PIDFILE" && kill -$1 $(<$PIDFILE)
+}
+
+case $1 in
+start)
+  sig 0 && echo >&2 "Already running" && exit 0
+  exec $CMD
+  ;;
+stop)
+  sig TERM && exit 0
+  echo >&2 "Not running"
+  ;;
+*)
+  echo >&2 "Usage: $0 <start|stop>"
+  exit 1
+  ;;
+esac
+
