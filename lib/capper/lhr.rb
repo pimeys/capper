@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/base' unless defined?(Capper)
 
-require 'capper/bundler'
 require 'capper/monit'
 
 Capper.load do
